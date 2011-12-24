@@ -15,6 +15,13 @@ class Setup extends CI_Model {
 
 	}
 
+	/**
+	* Setup the initial database configuration.
+	*
+	* @param array $config the initial configuration array 
+	*
+	* @return bool
+	*/	
 	public function setup_initial_database($config)
 	{
 		$this->_database_config($config);
@@ -101,6 +108,7 @@ class Setup extends CI_Model {
              'type' => 'INT',
              'constraint' => 10, 
              'unsigned' => TRUE,
+             'null' => TRUE,
                            ),
          'event_name' => array(
              'type' => 'INT',

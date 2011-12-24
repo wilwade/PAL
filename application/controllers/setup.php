@@ -22,6 +22,8 @@ class Setup extends CI_Controller {
 	 */
 	public function index()
 	{
+		//TODO There needs to be a message here about what you will need
+		//Perhaps a little about the system and a link to the github page.
 		return $this->database_permissions();
 	}
 	
@@ -52,14 +54,62 @@ class Setup extends CI_Controller {
 			
 			if($this->Setup->setup_initial_database($post))
 			{
-				//Ok we are good. Go on to initial setup
+				//Ok we are good. Add the database to the autoload
+				$autoload = $this->config->item('libraries');
+				$autoload[] = 'database';
+				$this->config->set_item('libraries', $autoload);
+				
+				//Go on to password setup
+				redirect('setup/password');
 			}
 		}		
+		$data['title'] = ''; 
+		$this->template->write_view('content', 'forms', $data);
+		$this->template->render();	
+	}
+	
+	/**
+	 * Setup the password
+	 * 
+	 * @return page
+	 */
+	public function password()
+	{
+		$this->form
+			->open()
+			->html('<p>' . $this->lang->line('setup_password_instructions') . '</p>')
+			->password('password1', 'Password', 'required')
+			->password('password2', 'Repeat Password', 'required')
+			->submit('Continue Setup', 'setup_password');
+			
+		$data['form'] = $this->form->get();
 		
+		if($this->form->valid)
+		{
+			$post = $this->form->get_post();
+			
+			if($post['password1'] === $post['password2'])
+			{
+				//Ok we have matching passwords
+				
+				//Generate Salt
+				$salt = uniqid('', TRUE);
+				$this->config->set_item('pal_password_salt', $salt);
+				
+				//Set password
+				$this->config->set_item('pal_password', crypt($post['password1'], $salt));
+				
+				//Ok and we are off and running!
+				redirect('');
+			}
+			else
+			{
+				//TODO Show a message about the passwords not being the same.
+			}		
+		
+		$data['title'] = ''; 
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
-		
-		//$this->config->set_item('set', 'value');
 	}
 }
 
