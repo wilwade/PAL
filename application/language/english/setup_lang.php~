@@ -10,4 +10,4 @@
  
  $lang['setup_database_instructions'] =
  'Access to a MySQL database is required. Please provide a user with database create abilities.
- Once the database has been created, you can restrict that user to the database.';
+ The database will then create a database and a user with permissions only to that database.';

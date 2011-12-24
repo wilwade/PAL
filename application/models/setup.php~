@@ -33,7 +33,7 @@ class Setup extends CI_Model {
 			return FALSE;
 		}
 		
-		return TRUE;
+		
 	}
 	
 	/**
