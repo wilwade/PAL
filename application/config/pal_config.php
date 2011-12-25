@@ -7,8 +7,8 @@
 | Currently PAL is a single user system. Here we store the current password
 |
 */
-$config['pal_password']	= '';
-$config['pal_password_salt']	= '';
+$config['pal_password'] = '4e4bsH.RT36MY' ;
+$config['pal_password_salt'] = '4ef66f0f6ddbd8.76834368' ;
 
 /*
 |--------------------------------------------------------------------------

@@ -5,37 +5,37 @@
  *
  */
 class Setup extends CI_Controller {
-	
+
 	function __construct()
 	{
 		parent::__construct();
 		$this->lang->load('setup');
 		$this->load->library('Form');
-		$this->load->model('Setup');
+		$this->load->model('Setups');
 	}
 
 	/**
 	 * Welcome to PAL
 	 * Next to configure the database server
-	 * 
+	 *
 	 * @return page
 	 */
 	public function index()
 	{
 		//TODO There needs to be a message here about what you will need
 		//Perhaps a little about the system and a link to the github page.
+
 		return $this->database_permissions();
 	}
-	
+
 	/**
 	 * Setup permissions to the database
-	 * 
+	 *
 	 * @return page
 	 */
 	public function database_permissions()
 	{
 		//Ok time to setup the form for the various values.
-		
 		$this->form
 			->open()
 			->html('<p>' . $this->lang->line('setup_database_instructions') . '</p>')
@@ -45,32 +45,58 @@ class Setup extends CI_Controller {
 			->text('database', 'Unique Database Name', 'required', 'PAL_database')
 			->text('dbprefix', 'Database Prefix (leave blank for none)', '', '')
 			->submit('Continue Setup', 'setup_db_permissions');
-			
+
 		$data['form'] = $this->form->get();
-		
+
 		if($this->form->valid)
 		{
 			$post = $this->form->get_post();
-			
-			if($this->Setup->setup_initial_database($post))
+
+			$config = $post;
+
+			unset($config['setup_db_permissions']);
+			unset($config['database']);
+
+			$this->Setups->database_config($config);
+
+			$this->load->database();
+			$this->load->dbforge();
+
+			$continue = TRUE;
+
+			if($this->dbforge->create_database($post['database']))
 			{
-				//Ok we are good. Add the database to the autoload
-				$autoload = $this->config->item('libraries');
-				$autoload[] = 'database';
-				$this->config->set_item('libraries', $autoload);
-				
-				//Go on to password setup
-				redirect('setup/password');
+				//Save the db name
+				$this->Setups->database_config(array('database' => $post['database']));
+
+				//Redirect to setup the tables
+				return redirect('setup/create_tables');
 			}
-		}		
-		$data['title'] = ''; 
+
+			//TODO Show error
+		}
+		$data['title'] = 'Setup Database';
 		$this->template->write_view('content', 'forms', $data);
-		$this->template->render();	
+		$this->template->render();
 	}
-	
+
+	/**
+	 * Create the Database Tables
+	 */
+	public function create_tables()
+	{
+		if($this->Setups->create_tables())
+		{
+			//Go on to password setup
+			return redirect('setup/password');
+		}
+
+		//TODO Show Error
+	}
+
 	/**
 	 * Setup the password
-	 * 
+	 *
 	 * @return page
 	 */
 	public function password()
@@ -81,36 +107,41 @@ class Setup extends CI_Controller {
 			->password('password1', 'Password', 'required')
 			->password('password2', 'Repeat Password', 'required')
 			->submit('Continue Setup', 'setup_password');
-			
+
 		$data['form'] = $this->form->get();
-		
+
 		if($this->form->valid)
 		{
 			$post = $this->form->get_post();
-			
+
 			if($post['password1'] === $post['password2'])
 			{
 				//Ok we have matching passwords
-				
+
 				//Generate Salt
 				$salt = uniqid('', TRUE);
-				$this->config->set_item('pal_password_salt', $salt);
-				
+				$config['pal_password_salt'] = $config['encryption_key'] = $salt;
+
 				//Set password
-				$this->config->set_item('pal_password', crypt($post['password1'], $salt));
-				
+				$config['pal_password'] = crypt($post['password1'], $salt);
+
+				//Write it to the files
+				$this->Setups->write_pal_config($config);
+
 				//Ok and we are off and running!
-				redirect('');
+				return redirect('');
 			}
 			else
 			{
 				//TODO Show a message about the passwords not being the same.
-			}		
-		
-		$data['title'] = ''; 
+			}
+		}
+
+		$data['title'] = 'Setup Password';
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
 	}
+
 }
 
 /* End of file setup.php */
