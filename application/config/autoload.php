@@ -96,7 +96,7 @@ $autoload['config'] = array('pal_config');
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array('form');
 
 
 /*

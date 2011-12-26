@@ -41,6 +41,11 @@ class Entries extends CI_Controller
 	 */
 	public function add($event_id = FALSE)
 	{
+		if($this->input->post('cancel'))
+		{
+			return redirect('events');
+		}
+
 		//If $event_id is false, then we need to go away
 		if($event_id === FALSE)
 		{
@@ -51,9 +56,19 @@ class Entries extends CI_Controller
 
 		$this->form
 			->open('entries/add/' . $event_id)
-			//date changer
+			->text('date', $this->lang->line('entries_form_date'), 'required', $this->Entry->date->format('Y-m-d'), array(
+				'type' => 'date',
+				'data-role' =>'datebox',
+				'data-options'=> '{"mode": "calbox"}'
+				)) //Date
+			->text('time', $this->lang->line('entries_form_time'), 'required', $this->Entry->date->format('H:m a'), array(
+				'type' => 'date',
+				'data-role' =>'datebox',
+				'data-options'=> '{"mode": "timebox", "timeFormatOverride": 12}'
+				)) //Date
 			->textarea('comments', $this->lang->line('entries_form_comments'))
-			->submit($this->lang->line('entries_form_add_submit'), 'add_new_entry');
+			->submit($this->lang->line('entries_form_add_submit'), 'add_new_entry')
+			->submit($this->lang->line('cancel'), 'cancel');
 
 		$data['form'] = $this->form->get();
 
@@ -81,6 +96,10 @@ class Entries extends CI_Controller
 	 */
 	public function edit($entry_id = FALSE)
 	{
+		if($this->input->post('cancel'))
+		{
+			return redirect('entries/history');
+		}
 		//If $event_id is false, then we need to go away
 		if($entry_id === FALSE)
 		{
@@ -102,10 +121,26 @@ class Entries extends CI_Controller
 
 		$this->form
 			->open('entries/edit/' . $entry_id)
-			//date changer
+			->text('date', $this->lang->line('entries_form_date'), 'required', $this->Entry->date->format('Y-m-d'), array(
+				'type' => 'date',
+				'data-role' =>'datebox',
+				'data-options'=> '{"mode": "calbox"}'
+				)) //Date
+			->text(
+				'time',
+				$this->lang->line('entries_form_time'),
+				'required',
+				$this->Entry->date->format('H:m a'),
+					array(
+					'type' => 'date',
+					'data-role' =>'datebox',
+					'data-options'=> '{"mode": "timebox", "timeFormatOverride": 12}'
+					)
+				) //Date
 			->select('event_id', $events, $this->lang->line('entries_form_event'), 'required',$this->Entry->event_id)
 			->textarea('comments', $this->lang->line('entries_form_comments'), '',$this->Entry->comments)
-			->submit($this->lang->line('entries_form_add_submit'), 'add_new_entry');
+			->submit($this->lang->line('entries_form_edit_submit'), 'add_new_entry')
+			->submit($this->lang->line('cancel'), 'cancel');
 
 		$data['form'] = $this->form->get();
 
@@ -113,7 +148,7 @@ class Entries extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$this->Entry->set_timestamp($post['date']);
+			$this->Entry->set_timestamp($post['date'] . ' ' . $post['time']);
 			$this->Entry->event_id = $post['event_id'][0];
 			$this->Entry->comments = $post['comments'];
 
@@ -125,6 +160,8 @@ class Entries extends CI_Controller
 		}
 
 		$data['title'] = $this->lang->line('entries_edit_title');
+		$this->template->add_js('assets/js/jquery.mobile.datebox-1.0.0.min.js', 'import');
+		$this->template->add_css('assets/css/jquery.mobile.datebox-1.0.0.min.css', 'import');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
 	}

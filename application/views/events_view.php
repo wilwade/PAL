@@ -3,9 +3,7 @@
 		<?php foreach ($events as $event): ?>
 
 			<div id="<?php print $event->event_id; ?>" class="event_button <?php print $event->color; ?>">
-				<a href="entries/add/<?php print $event->event_id; ?>">
-					<?php print $event->event_name; ?>
-				</a>
+				<?php print anchor("entries/add/{$event->event_id}", $event->event_name); ?>
 			</div>
 
 		<?php endforeach; ?>
@@ -14,14 +12,10 @@
 	<?php endif; ?>
 
 	<div id="history" class="event_button">
-		<a href="entries/log">
-			History
-		</a>
+		<?php print anchor('entries/history', $this->lang->line('history')); ?>
 	</div>
 
 	<div id="admin_button" class="event_button">
-		<a href="admin">
-			Admin
-		</a>
+		<?php print anchor('admin', $this->lang->line('admin')); ?>
 	</div>
 </div>

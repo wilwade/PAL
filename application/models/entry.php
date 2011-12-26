@@ -92,7 +92,7 @@ class Entry extends CI_Model
 			$entry->comments		= (String)$row->comments;
 			$entry->date			= new DateTime(NULL, $this->config->item('timezone'));
 			$entry->date->setTimestamp($row->timestamp);
-			
+
 			$entries[] = $entry;
 			unset($entry);
 		}
@@ -109,6 +109,7 @@ class Entry extends CI_Model
 	 */
 	public function set_timestamp($local_time_string = 'now')
 	{
+		date_default_timezone_set($this->config->item('timezone'));
 		$this->timestamp = strtotime($local_time_string);
 		$this->date = new DateTime(NULL, $this->config->item('timezone'));
 		$this->date->setTimestamp($row->timestamp);
@@ -140,26 +141,19 @@ class Entry extends CI_Model
 	 * Create a new Entry based on the following
 	 *
 	 * @param string $event_id Event id to connect to the entry
-	 * @param int	 $timestamp UTC time for the event, defaults to gmmktime
+	 * @param int	 $timestring Time string, empty for now.
 	 * @param string $comments Comments for the entry
 	 *
 	 *
 	 * @return Entry
 	 */
-	public function create($event_id, $timestamp = FALSE, $comments = '')
+	public function create($event_id, $timestring = 'now', $comments = '')
 	{
-
-		if($timestamp === FALSE)
-		{
-			//Set to now.
-			$timestamp = time();
-		}
+		$this->set_timestamp($timestring);
 
 		$this->event_id		= (int)$event_id;
 		$this->comments		= (String)$comments;
-		$this->date			= new DateTime(NULL, $this->config->item('timezone'));
-		$this->date->setTimestamp($timestamp);
-		$this->timestamp	= $timestamp;
+
 
 		return $this;
 	}

@@ -50,6 +50,11 @@ class Events extends CI_Controller
 	 */
 	public function add()
 	{
+		if($this->input->post('cancel'))
+		{
+			return redirect('events');
+		}
+		
 		$this->load->library('Form');
 
 		$colors = array();
