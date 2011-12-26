@@ -2133,7 +2133,6 @@ class Form {
 
 			$this->_output .= $this->$element->get()."\n";
 		}
-
 		return $array;
 	}
 

@@ -52,19 +52,26 @@ class Entries extends CI_Controller
 			return redirect('events');
 		}
 
+		$this->load->model('Event');
+
+		$event = $this->Event->get($event_id);
+
 		$this->load->library('Form');
 
+		$date = new DateTime('now', $this->config->item('timezone'));
+
 		$this->form
+			->html("<h2>{$event->event_name}</h2>")
 			->open('entries/add/' . $event_id)
-			->text('date', $this->lang->line('entries_form_date'), 'required', $this->Entry->date->format('Y-m-d'), array(
+			->text('date', $this->lang->line('entries_form_date'), 'required', $date->format('Y-m-d'), array(
 				'type' => 'date',
 				'data-role' =>'datebox',
-				'data-options'=> '{"mode": "calbox"}'
+				'data-options'=> '{&quot;mode&quot;: &quot;calbox&quot;}'
 				)) //Date
-			->text('time', $this->lang->line('entries_form_time'), 'required', $this->Entry->date->format('H:m a'), array(
+			->text('time', $this->lang->line('entries_form_time'), 'required', $date->format('h:m a'), array(
 				'type' => 'date',
 				'data-role' =>'datebox',
-				'data-options'=> '{"mode": "timebox", "timeFormatOverride": 12}'
+				'data-options'=> '{&quot;mode&quot;: &quot;timebox&quot;, &quot;timeFormatOverride&quot;: 12}'
 				)) //Date
 			->textarea('comments', $this->lang->line('entries_form_comments'))
 			->submit($this->lang->line('entries_form_add_submit'), 'add_new_entry')
@@ -120,21 +127,22 @@ class Entries extends CI_Controller
 		}
 
 		$this->form
+			->html("<h2>{$events[$this->Entry->event_id]->event_name}</h2>")
 			->open('entries/edit/' . $entry_id)
 			->text('date', $this->lang->line('entries_form_date'), 'required', $this->Entry->date->format('Y-m-d'), array(
 				'type' => 'date',
 				'data-role' =>'datebox',
-				'data-options'=> '{"mode": "calbox"}'
+				'data-options'=> '{&quot;mode&quot;: &quot;calbox&quot;}'
 				)) //Date
 			->text(
 				'time',
 				$this->lang->line('entries_form_time'),
 				'required',
-				$this->Entry->date->format('H:m a'),
+				$this->Entry->date->format('h:m a'),
 					array(
 					'type' => 'date',
 					'data-role' =>'datebox',
-					'data-options'=> '{"mode": "timebox", "timeFormatOverride": 12}'
+					'data-options' => '{&quot;mode&quot;: &quot;timebox&quot;, &quot;timeFormatOverride&quot;: 12}'
 					)
 				) //Date
 			->select('event_id', $events, $this->lang->line('entries_form_event'), 'required',$this->Entry->event_id)

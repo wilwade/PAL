@@ -10,36 +10,44 @@
 * Color classes. Here we setup the colors named in the config file.
 */
 
-.black {
+.black a {
 	background-color: black;
+	border-color: grey;
 	color: white;
 }
 .blue {
 	background-color: blue;
+	border-color: grey;
 	color: black;
 }
 .green {
 	background-color: green;
+	border-color: grey;
 	color: black;
 }
 .red {
 	background-color: red;
+	border-color: grey;
 	color: black;
 }
 .yellow {
 	background-color: yellow;
+	border-color: grey;
 	color: black;
 }
 .purple {
 	background-color: purple;
+	border-color: grey;
 	color: white;
 }
 .teal {
 	background-color: teal;
+	border-color: grey;
 	color: black;
 }
 .gray {
 	background-color: gray;
+	border-color: black;
 	color: black;
 }
 
@@ -64,6 +72,16 @@ root {
 
 }
 
+.event_button a {
+	min-width: 100px;
+	display: block;
+	text-align: center;
+	padding: 30px 0;
+	border-style: solid;
+	border-width: 2px;
+	border-color: inherit;
+}
+
 .log_entry_time {
-	
+
 }
