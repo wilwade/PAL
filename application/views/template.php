@@ -12,6 +12,14 @@
 		<link rel="stylesheet" href="assets/css/default.css" />
 		<?php print $_scripts; ?>
 		<?php print $_styles; ?>
+
+		<script>
+			$(document).ready(function() {
+				// disable ajax nav
+				$.mobile.ajaxLinksEnabled = false;
+			});
+		</script>
+
 	</head>
 	<body>
 

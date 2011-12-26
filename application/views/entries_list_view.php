@@ -4,10 +4,11 @@
 		<div id="<?php print $event->event_id; ?>" class="log_entry <?php print $event->color; ?>">
 			<h2 class="event_title"><?php print $event->event_name; ?></h2>
 			<?php print anchor("events/edit/{$event->event_id}", $this->lang->line('form_edit')); ?>
-			<br />
+			&nbsp;&nbsp;|&nbsp;&nbsp;
 			<?php print anchor("events/delete/{$event->event_id}", $this->lang->line('form_delete')); ?>
 			<br />
 			<?php print $event->description; ?>
+			<br />
 		</div>
 
 	<?php endforeach; ?>

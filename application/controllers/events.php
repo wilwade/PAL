@@ -105,7 +105,49 @@ class Events extends CI_Controller
 
 	public function edit($event_id)
 	{
+		if($this->input->post('cancel'))
+		{
+			return redirect('events');
+		}
 
+		$this->load->library('Form');
+
+		$colors = array();
+
+		foreach($this->config->item('pal_colors') as $color)
+		{
+			$colors[$color] = $color;
+		}
+
+		$this->Event->get($event_id);
+
+		$this->form
+			->open('events/edit/' . $event_id)
+			->text('event_name', $this->lang->line('events_form_name'), 'required', $this->Event->event_name)
+			->select('color', $colors, $this->lang->line('events_form_color'), $this->Event->color) //Select colors
+			->textarea('description', $this->lang->line('events_form_description'), $this->Event->description)
+			->submit($this->lang->line('events_form_edit_submit'), 'edit_event');
+
+		$data['form'] = $this->form->get();
+
+		if ($this->form->valid)
+		{
+			$post = $this->form->get_post();
+
+			$this->Event->event_name = $post['event_name'];
+			$this->Event->color = $post['color'][0];
+			$this->Event->description = $post['description'];
+			
+			$this->Event->save();
+
+			//Ok return to main
+			return redirect('events');
+
+		}
+
+		$data['title'] = $this->lang->line('events_add_title');
+		$this->template->write_view('content', 'forms', $data);
+		$this->template->render();
 	}
 
 	/**

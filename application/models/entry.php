@@ -132,7 +132,8 @@ class Entry extends CI_Model
 		}
 		else
 		{
-			$this->db->update($this->entry_id, $this);
+			$this->db->where('entry_id', $this->entry_id);
+			$this->db->update('entry', $this);
 			return $this;
 		}
 	}

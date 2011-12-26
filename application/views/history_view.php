@@ -6,6 +6,8 @@
 			<?php print anchor("entries/edit/{$entry->entry_id}", $events[$entry->event_id]->event_name); ?>
 			<br />
 			<?php print $entry->comments; ?>
+			<br />
+			<span style=" width:100%; text-align:left">Delete</span>
 		</div>
 
 	<?php endforeach; ?>

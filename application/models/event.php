@@ -121,7 +121,8 @@ class Event extends CI_Model
 		}
 		else
 		{
-			$this->db->update($this->event_id, $this);
+			$this->db->where('event_id', $this->event_id);
+			$this->db->update('event', $this);
 			return $this;
 		}
 	}
@@ -154,6 +155,11 @@ class Event extends CI_Model
 	{
 		$this->db->where('event_id', $event_id);
 		$this->db->delete('event');
+
+		//Delete the related entries
+		$this->db->where('event_id', $event_id);
+		$this->db->delete('entry');
+
 		return $event_id;
 	}
 }
