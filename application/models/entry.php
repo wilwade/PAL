@@ -15,10 +15,10 @@ class Entry extends CI_Model
 {
 
 	private $entry_id		= -1;
-	private $event_id		= -1;
-	private $comments		= '';
-	private $date			= '';
-	private $timestamp		= -1;
+	public $event_id		= -1;
+	public $comments		= '';
+	public $date			= NULL;
+	public $timestamp		= -1;
 
 	function __constructor()
 	{
@@ -32,7 +32,7 @@ class Entry extends CI_Model
 	 *
 	 * @return Entry
 	 */
-	function get($entry_id)
+	public function get($entry_id)
 	{
 		$this->db
 			->select()
@@ -48,10 +48,21 @@ class Entry extends CI_Model
 		$this->entry_id		= (int)$row->entry_id;
 		$this->event_id		= (int)$row->event_id;
 		$this->comments		= (String)$row->comments;
-		$this->date			= new DateTime($row->timestamp, $this->Config->item('timestamp'));
+		$this->date			= new DateTime(NULL, $this->config->item('timezone'));
+		$this->date->setTimestamp($row->timestamp);
 		$this->timestamp	= (int)$row->timestamp;
 
 		return $this;
+	}
+
+	/**
+	 * Return the current entry id
+	 *
+	 * @return int
+	 */
+	public function get_entry_id()
+	{
+		return $this->entry_id;
 	}
 
 	/**
@@ -61,11 +72,11 @@ class Entry extends CI_Model
 	 *
 	 * @return array
 	 */
-	function get_all_entries()
+	public function get_all_entries()
 	{
 		$this->db
 			->select()
-			->order_by('entry_name');
+			->order_by('timestamp', 'DESC');
 		$query = $this->db->get('entry');
 		if($query-> num_rows() === 0)
 		{
@@ -79,13 +90,29 @@ class Entry extends CI_Model
 			$entry->entry_id		= (int)$row->entry_id;
 			$entry->event_id		= (int)$row->event_id;
 			$entry->comments		= (String)$row->comments;
-			$entry->date			= new DateTime($row->timestamp, $this->Config->item('timestamp'));
-			$entry->timestamp		= (int)$row->timestamp;
-
+			$entry->date			= new DateTime(NULL, $this->config->item('timezone'));
+			$entry->date->setTimestamp($row->timestamp);
+			
 			$entries[] = $entry;
+			unset($entry);
 		}
 
 		return $entries;
+	}
+
+	/**
+	 * Set the timestamp.
+	 *
+	 * @param string $local_time_string strtotime parsable local time string.
+	 *
+	 * @return Entry
+	 */
+	public function set_timestamp($local_time_string = 'now')
+	{
+		$this->timestamp = strtotime($local_time_string);
+		$this->date = new DateTime(NULL, $this->config->item('timezone'));
+		$this->date->setTimestamp($row->timestamp);
+		return $this;
 	}
 
 	/**
@@ -98,9 +125,8 @@ class Entry extends CI_Model
 		if($this->entry_id === -1)
 		{
 			//This is a new entry. Insert Please
-			unset($this->entry_id);
 			$this->db->insert('entry', $this);
-			$this->entry_id = $this->db->last_insert_id();
+			$this->entry_id = $this->db->insert_id();
 			return $this;
 		}
 		else
@@ -122,15 +148,19 @@ class Entry extends CI_Model
 	 */
 	public function create($event_id, $timestamp = FALSE, $comments = '')
 	{
+
 		if($timestamp === FALSE)
 		{
 			//Set to now.
 			$timestamp = time();
 		}
+
 		$this->event_id		= (int)$event_id;
 		$this->comments		= (String)$comments;
-		$this->date			= new DateTime($timestamp, $this->Config->item('timestamp'));
+		$this->date			= new DateTime(NULL, $this->config->item('timezone'));
+		$this->date->setTimestamp($timestamp);
 		$this->timestamp	= $timestamp;
+
 		return $this;
 	}
 }

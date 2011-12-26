@@ -61,10 +61,10 @@ class Events extends CI_Controller
 
 		$this->form
 			->open('events/add')
-			->text('event_name', 'Name', 'required')
-			->select('color', $colors, 'Event Color') //Select colors
-			->textarea('description', 'Details')
-			->submit('Add New Event', 'add_new_event');
+			->text('event_name', $this->lang->line('events_form_name'), 'required')
+			->select('color', $colors, $this->lang->line('events_form_color')) //Select colors
+			->textarea('description', $this->lang->line('events_form_description'))
+			->submit($this->lang->line('events_form_add_submit'), 'add_new_event');
 
 		$data['form'] = $this->form->get();
 
@@ -80,7 +80,7 @@ class Events extends CI_Controller
 
 		}
 
-		$data['title'] = $this->lang->line('add_event');
+		$data['title'] = $this->lang->line('events_add_title');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
 	}

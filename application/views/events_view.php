@@ -2,8 +2,8 @@
 	<?php if ($events !== FALSE): ?>
 		<?php foreach ($events as $event): ?>
 
-			<div id="<?php print $event->event_id; ?>" class="event_button">
-				<a href="entry/add/<?php print $event->event_id; ?>">
+			<div id="<?php print $event->event_id; ?>" class="event_button <?php print $event->color; ?>">
+				<a href="entries/add/<?php print $event->event_id; ?>">
 					<?php print $event->event_name; ?>
 				</a>
 			</div>
@@ -14,7 +14,7 @@
 	<?php endif; ?>
 
 	<div id="history" class="event_button">
-		<a href="entry/log">
+		<a href="entries/log">
 			History
 		</a>
 	</div>

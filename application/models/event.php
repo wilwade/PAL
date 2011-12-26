@@ -4,7 +4,7 @@ if ( ! defined('BASEPATH'))
 	exit('No direct script access allowed');
 
 /**
- * Event Model
+ * Event Model (Events are called Activies in the interface.)
  *
  * Working with Event Table
  *
@@ -14,10 +14,10 @@ if ( ! defined('BASEPATH'))
 class Event extends CI_Model
 {
 
-	var $event_id		= -1;
-    var $event_name	= '';
-    var $color			= '';
-	var $description   = '';
+	private $event_id		= -1;
+    public $event_name	= '';
+    public $color			= '';
+	public $description   = '';
 
 	function __constructor()
 	{
@@ -31,7 +31,7 @@ class Event extends CI_Model
 	 *
 	 * @return Event
 	 */
-	function get($event_id)
+	public function get($event_id)
 	{
 		$this->db
 			->select()
@@ -53,13 +53,25 @@ class Event extends CI_Model
 	}
 
 	/**
+	 * Return the current event id
+	 *
+	 * @return int
+	 */
+	public function get_event_id()
+	{
+		return $this->event_id;
+	}
+
+	/**
 	 * Return all the current events
 	 *
 	 * TODO: Only return the ones for the current user
 	 *
+	 * @param bool $index_by_id Index the return array by id
+	 *
 	 * @return array
 	 */
-	function get_all_events()
+	public function get_all_events($index_by_id = FALSE)
 	{
 		$this->db
 			->select()
@@ -79,7 +91,14 @@ class Event extends CI_Model
 			$event->color		= (String)$row->color;
 			$event->description	= (String)$row->description;
 
-			$events[] = $event;
+			if($index_by_id)
+			{
+				$events[$event->event_id] = $event;
+			}
+			else
+			{
+				$events[] = $event;
+			}
 			unset($event);
 		}
 
@@ -96,7 +115,6 @@ class Event extends CI_Model
 		if($this->event_id === -1)
 		{
 			//This is a new entry. Insert Please
-			unset($this->event_id);
 			$this->db->insert('event', $this);
 			$this->event_id = $this->db->insert_id();
 			return $this;
