@@ -11,3 +11,6 @@
 
  $lang['welcome_login'] =
  'Please Login to PAL:';
+
+ $lang['welcome_login_title'] =
+ 'Login to PAL';

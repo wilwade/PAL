@@ -1,0 +1,65 @@
+/*
+    Document   : default
+    Created on : Dec 26, 2011, 11:06:45 AM
+    Author     : willmwade
+    Description:
+        This is the default theme for PAL
+*/
+
+/*
+* Color classes. Here we setup the colors named in the config file.
+*/
+
+.black {
+	background-color: black;
+	color: white;
+}
+.blue {
+	background-color: blue;
+	color: black;
+}
+.green {
+	background-color: green;
+	color: black;
+}
+.red {
+	background-color: red;
+	color: black;
+}
+.yellow {
+	background-color: yellow;
+	color: black;
+}
+.purple {
+	background-color: purple;
+	color: white;
+}
+.teal {
+	background-color: teal;
+	color: black;
+}
+.gray {
+	background-color: gray;
+	color: black;
+}
+
+/*
+* END Color classes.
+*/
+
+root {
+    display: block;
+}
+
+#event_columns{
+	-moz-column-count: 2;
+	-moz-column-gap: 5%;
+	-webkit-column-count: 2;
+	-webkit-column-gap: 5%;
+	column-count: 2;
+	column-gap: 5%;
+}
+
+.event_button {
+
+}

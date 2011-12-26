@@ -14,10 +14,10 @@ if ( ! defined('BASEPATH'))
 class Event extends CI_Model
 {
 
-	private $event_id		= -1;
-    private $event_name	= '';
-    private $color			= '';
-	private $description   = '';
+	var $event_id		= -1;
+    var $event_name	= '';
+    var $color			= '';
+	var $description   = '';
 
 	function __constructor()
 	{
@@ -80,6 +80,7 @@ class Event extends CI_Model
 			$event->description	= (String)$row->description;
 
 			$events[] = $event;
+			unset($event);
 		}
 
 		return $events;
@@ -97,7 +98,7 @@ class Event extends CI_Model
 			//This is a new entry. Insert Please
 			unset($this->event_id);
 			$this->db->insert('event', $this);
-			$this->event_id = $this->db->last_insert_id();
+			$this->event_id = $this->db->insert_id();
 			return $this;
 		}
 		else

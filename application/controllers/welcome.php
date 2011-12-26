@@ -54,7 +54,7 @@ class Welcome extends CI_Controller
 
 			$salt = $this->config->item('pal_password_salt');
 
-			if (crypt($post['password'], $salt) === $this->config->set_item('pal_password'))
+			if (crypt($post['password'], $salt) === $this->config->item('pal_password'))
 			{
 				//Login Successful!
 				//Setup the session to remember that we are logged in
@@ -69,7 +69,7 @@ class Welcome extends CI_Controller
 			}
 		}
 
-		$data['title'] = 'Login to PAL';
+		$data['title'] = $this->lang->line('welcome_login_title');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
 	}

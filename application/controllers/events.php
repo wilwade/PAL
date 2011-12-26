@@ -12,40 +12,59 @@ class Events extends CI_Controller
 		$this->lang->load('events');
 		$this->load->database();
 		$this->load->library('session');
+
+		if( ! $this->session->userdata('pal_login'))
+		{
+			//Not Logged in!
+			return redirect('welcome/login');
+		}
+
 		$this->load->library('Message');
 		$this->load->model('Event');
 		//$this->load->library('Form');
 	}
 
 	/**
-	 * Index. Check for session, pass to event or login.
-	 *
-	 * @return redirect
-	 */
-	public function index()
-	{
-		if($this->session->userdata('pal_login'))
-		{
-			//Continue to the main events page
-			return redirect('events');
-		}
-
-		//Go to login page
-		return $this->login();
-	}
-
-	/**
-	 * Basically a login screen.
+	 * Show the basic listing of event buttons
+	 * Also:
+	 * Admin Button
+	 * History Button
 	 *
 	 * @return page
 	 */
-	public function login()
+	public function index()
 	{
+		//Get the listing of all possible events.
+		$data['events'] = $this->Event->get_all_events();
+
+		//Show View
+		$data['title'] = $this->lang->line('events_main_title');
+		$this->template->write_view('content', 'events_view', $data);
+		$this->template->render();
+	}
+
+	/**
+	 * Add an event
+	 *
+	 * @return page
+	 */
+	public function add()
+	{
+		$this->load->library('Form');
+
+		$colors = array();
+
+		foreach($this->config->item('pal_colors') as $color)
+		{
+			$colors[$color] = $color;
+		}
+
 		$this->form
-			->open('welcome/login')
-			->html('<p>' . $this->lang->line('welcome_login') . '</p>')
-			->password('password', 'Password', 'required')
-			->submit('Login', 'login');
+			->open('events/add')
+			->text('event_name', 'Name', 'required')
+			->select('color', $colors, 'Event Color') //Select colors
+			->textarea('description', 'Details')
+			->submit('Add New Event', 'add_new_event');
 
 		$data['form'] = $this->form->get();
 
@@ -53,24 +72,15 @@ class Events extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$salt = $this->config->item('pal_password_salt');
+			$this->Event->create($post['event_name'], $post['color'][0], $post['description']);
+			$this->Event->save();
 
-			if (crypt($post['password'], $salt) === $this->config->set_item('pal_password'))
-			{
-				//Login Successful!
-				//Setup the session to remember that we are logged in
-				$this->session->set_userdata('pal_login', TRUE);
+			//Ok return to main
+			return redirect('events');
 
-				//Continue to the main events page
-				return redirect('events');
-			}
-			else
-			{
-				//TODO Show a message about incorrect password.
-			}
 		}
 
-		$data['title'] = 'Login to PAL';
+		$data['title'] = $this->lang->line('add_event');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
 	}
