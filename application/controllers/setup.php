@@ -137,7 +137,7 @@ class Setup extends CI_Controller {
 			}
 		}
 
-		$data['title'] = 'Setup Password';
+		$data['title'] = 'Setup Password';//TODO Lang
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
 	}

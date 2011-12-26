@@ -18,6 +18,9 @@
  $lang['events_add_title'] =
  'Add New Activity';
 
+ $lang['events_all_title'] =
+ 'Activities';
+
  $lang['events_edit_title'] =
  'Edit '; //Edit $event_name
 

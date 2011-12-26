@@ -14,3 +14,12 @@
 
  $lang['admin_add_event'] =
  'Add new Activity';
+
+ $lang['admin_list_events'] =
+ 'List Activities';
+
+ $lang['admin_change_password'] =
+ 'Change Password';
+
+ $lang['admin_logout'] =
+ 'Logout';

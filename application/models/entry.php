@@ -157,4 +157,18 @@ class Entry extends CI_Model
 
 		return $this;
 	}
+
+	/**
+	 * Delete an entry
+	 *
+	 * @param int $entry_id id to delete
+	 *
+	 * @return int
+	 */
+	public function delete($entry_id)
+	{
+		$this->db->where('entry_id', $entry_id);
+		$this->db->delete('entry');
+		return $event_id;
+	}
 }

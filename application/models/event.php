@@ -142,4 +142,18 @@ class Event extends CI_Model
 		$this->description	= (String)$description;
 		return $this;
 	}
+
+	/**
+	 * Delete an event
+	 *
+	 * @param int $event_id id to delete
+	 *
+	 * @return int
+	 */
+	public function delete($event_id)
+	{
+		$this->db->where('event_id', $event_id);
+		$this->db->delete('event');
+		return $event_id;
+	}
 }

@@ -6,11 +6,15 @@
         This is the default theme for PAL
 */
 
+body {
+	width: 100%;
+}
+
 /*
 * Color classes. Here we setup the colors named in the config file.
 */
 
-.black a {
+.black {
 	background-color: black;
 	border-color: grey;
 	color: white;
@@ -60,16 +64,11 @@ root {
 }
 
 #event_columns{
-	-moz-column-count: 2;
-	-moz-column-gap: 5%;
-	-webkit-column-count: 2;
-	-webkit-column-gap: 5%;
-	column-count: 2;
-	column-gap: 5%;
+
 }
 
 .event_button {
-
+	margin: 5px;
 }
 
 .event_button a {
@@ -84,4 +83,12 @@ root {
 
 .log_entry_time {
 
+}
+
+.log_entry {
+	text-align: center;
+	border-style: solid;
+	border-width: 2px;
+	border-color: inherit;
+	margin: 10px 5px;
 }

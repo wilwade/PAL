@@ -68,7 +68,7 @@ class Entries extends CI_Controller
 				'data-role' =>'datebox',
 				'data-options'=> '{&quot;mode&quot;: &quot;calbox&quot;}'
 				)) //Date
-			->text('time', $this->lang->line('entries_form_time'), 'required', $date->format('h:m a'), array(
+			->text('time', $this->lang->line('entries_form_time'), 'required', $date->format('g:i a'), array(
 				'type' => 'date',
 				'data-role' =>'datebox',
 				'data-options'=> '{&quot;mode&quot;: &quot;timebox&quot;, &quot;timeFormatOverride&quot;: 12}'
@@ -83,7 +83,7 @@ class Entries extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$this->Entry->create($event_id, FALSE, $post['comments']);
+			$this->Entry->create($event_id, "{$post['date']} {$post['time']}", $post['comments']);
 			$this->Entry->save();
 
 			//Ok return to main
@@ -91,6 +91,8 @@ class Entries extends CI_Controller
 
 		}
 
+		$this->template->add_js('assets/js/jquery.mobile.datebox-1.0.0.min.js', 'import');
+		$this->template->add_css('assets/css/jquery.mobile.datebox-1.0.0.min.css', 'import');
 		$data['title'] = $this->lang->line('entries_add_title');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
@@ -138,7 +140,7 @@ class Entries extends CI_Controller
 				'time',
 				$this->lang->line('entries_form_time'),
 				'required',
-				$this->Entry->date->format('h:m a'),
+				$this->Entry->date->format('g:i a'),
 					array(
 					'type' => 'date',
 					'data-role' =>'datebox',
@@ -156,7 +158,7 @@ class Entries extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$this->Entry->set_timestamp($post['date'] . ' ' . $post['time']);
+			$this->Entry->set_timestamp("{$post['date']} {$post['time']}");
 			$this->Entry->event_id = $post['event_id'][0];
 			$this->Entry->comments = $post['comments'];
 
@@ -191,6 +193,19 @@ class Entries extends CI_Controller
 		$data['title'] = $this->lang->line('entries_history_title');
 		$this->template->write_view('content', 'history_view', $data);
 		$this->template->render();
+	}
+
+	/**
+	 * Delete an entry
+	 *
+	 * @param int $entry_id id to delete
+	 *
+	 * @return redirect
+	 */
+	public function delete($entry_id)
+	{
+		$this->Entry->delete($entry_id);
+		return redirect('entries/history');
 	}
 
 }

@@ -54,7 +54,7 @@ class Events extends CI_Controller
 		{
 			return redirect('events');
 		}
-		
+
 		$this->load->library('Form');
 
 		$colors = array();
@@ -88,6 +88,37 @@ class Events extends CI_Controller
 		$data['title'] = $this->lang->line('events_add_title');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
+	}
+
+	/**
+	 * View all the events and manage them
+	 *
+	 * @return page
+	 */
+	public function all()
+	{
+		$data['events'] = $this->Event->get_all_events();
+		$data['title'] = $this->lang->line('events_all_title');
+		$this->template->write_view('content', 'entries_list_view', $data);
+		$this->template->render();
+	}
+
+	public function edit($event_id)
+	{
+
+	}
+
+	/**
+	 * Delete an event
+	 *
+	 * @param int $event_id id to delete
+	 *
+	 * @return redirect
+	 */
+	public function delete($event_id)
+	{
+		$this->Event->delete($event_id);
+		return redirect('events/all');
 	}
 
 }
