@@ -3,17 +3,18 @@
 if ( ! defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-class Welcome extends CI_Controller
+class Events extends CI_Controller
 {
 
 	function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('welcome');
+		$this->lang->load('events');
 		$this->load->database();
 		$this->load->library('session');
 		$this->load->library('Message');
-		$this->load->library('Form');
+		$this->load->model('Event');
+		//$this->load->library('Form');
 	}
 
 	/**

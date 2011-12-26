@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Setup Model
+ * Setup_db Model
  *
  * Functions for setting up the database.
  *
  * @author willmwade
  * @version 1.0
  */
-class Setups extends CI_Model
+class Setup_db extends CI_Model
 {
 
 	function __constructor()
@@ -123,14 +123,14 @@ class Setups extends CI_Model
 				'unsigned' => TRUE,
 				'null' => TRUE,
 			),
-			'event_name' => array(
-				'type' => 'INT',
-				'unsigned' => TRUE,
-				'constraint' => 14,
-			),
 			'comments' => array(
 				'type' => 'TEXT',
 				'null' => TRUE,
+			),
+			'timestamp' => array(
+				'type' => 'INT',
+				'unsigned' => TRUE,
+				'constraint' => 14,
 			),
 		);
 		$this->dbforge->add_field($entry);

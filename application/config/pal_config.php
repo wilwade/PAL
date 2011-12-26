@@ -12,6 +12,16 @@ $config['pal_password_salt'] = '4ef66f0f6ddbd8.76834368' ;
 
 /*
 |--------------------------------------------------------------------------
+| Timezone
+|--------------------------------------------------------------------------
+| Set the timezone for the system
+| TODO: Move this into the user table when we do that.
+|
+*/
+$config['timezone'] = new DateTimeZone('America/New_York');
+
+/*
+|--------------------------------------------------------------------------
 | CSS Color Classes
 |--------------------------------------------------------------------------
 | Events can be colored so that they have different looks and then are also

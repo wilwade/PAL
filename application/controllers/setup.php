@@ -11,7 +11,7 @@ class Setup extends CI_Controller {
 		parent::__construct();
 		$this->lang->load('setup');
 		$this->load->library('Form');
-		$this->load->model('Setups');
+		$this->load->model('Setup_db');
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Setup extends CI_Controller {
 			unset($config['setup_db_permissions']);
 			unset($config['database']);
 
-			$this->Setups->database_config($config);
+			$this->Setup_db->database_config($config);
 
 			$this->load->database();
 			$this->load->dbforge();
@@ -67,7 +67,7 @@ class Setup extends CI_Controller {
 			if($this->dbforge->create_database($post['database']))
 			{
 				//Save the db name
-				$this->Setups->database_config(array('database' => $post['database']));
+				$this->Setup_db->database_config(array('database' => $post['database']));
 
 				//Redirect to setup the tables
 				return redirect('setup/create_tables');
@@ -85,7 +85,7 @@ class Setup extends CI_Controller {
 	 */
 	public function create_tables()
 	{
-		if($this->Setups->create_tables())
+		if($this->Setup_db->create_tables())
 		{
 			//Go on to password setup
 			return redirect('setup/password');
@@ -126,7 +126,7 @@ class Setup extends CI_Controller {
 				$config['pal_password'] = crypt($post['password1'], $salt);
 
 				//Write it to the files
-				$this->Setups->write_pal_config($config);
+				$this->Setup_db->write_pal_config($config);
 
 				//Ok and we are off and running!
 				return redirect('');
