@@ -109,7 +109,7 @@ class Entries extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$this->Entry->create($event_id, "{$post['date']} {$post['hour']}:{$post['minute']} {$post['ampm']}", $post['comments']);
+			$this->Entry->create($event_id, "{$post['date']} {$post['hour'][0]}:{$post['minute'][0]} {$post['ampm'][0]}", $post['comments']);
 			$this->Entry->save();
 
 			//Ok return to main
@@ -202,7 +202,7 @@ class Entries extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$this->Entry->set_timestamp("{$post['date']} {$post['hour']}:{$post['minute']} {$post['ampm']}");
+			$this->Entry->set_timestamp("{$post['date']} {$post['hour'][0]}:{$post['minute'][0]} {$post['ampm'][0]}");
 			$this->Entry->event_id = $post['event_id'][0];
 			$this->Entry->comments = $post['comments'];
 
