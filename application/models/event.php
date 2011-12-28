@@ -71,11 +71,17 @@ class Event extends CI_Model
 	 *
 	 * @return array
 	 */
-	public function get_all_events($index_by_id = FALSE)
+	public function get_all_events($index_by_id = FALSE, $limit = FALSE)
 	{
 		$this->db
 			->select()
 			->order_by('event_name');
+
+		if($limit !== FALSE)
+		{
+			$this->db->limit((int)$limit);
+		}
+
 		$query = $this->db->get('event');
 		if($query-> num_rows() === 0)
 		{

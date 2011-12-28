@@ -8,7 +8,7 @@ $lang['history'] =
 	'History';
 
 $lang['events'] =
-	'Activities';
+	'Home - Add Log Entries';
 
 $lang['admin'] =
 	'Admin';

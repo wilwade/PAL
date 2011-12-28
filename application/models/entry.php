@@ -72,11 +72,17 @@ class Entry extends CI_Model
 	 *
 	 * @return array
 	 */
-	public function get_all_entries()
+	public function get_all_entries($limit = FALSE)
 	{
 		$this->db
 			->select()
 			->order_by('timestamp', 'DESC');
+
+		if($limit !== FALSE)
+		{
+			$this->db->limit((int)$limit);
+		}
+
 		$query = $this->db->get('entry');
 		if($query-> num_rows() === 0)
 		{

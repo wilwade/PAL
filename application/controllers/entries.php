@@ -59,20 +59,46 @@ class Entries extends CI_Controller
 		$this->load->library('Form');
 
 		$date = new DateTime('now', $this->config->item('timezone'));
+		$hours = array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10', '11' => '11', '12' => '12');
+		$minutes = array('00' => '00', '05' => '05', '10' => '10', '15' => '15', '20' => '20', '25' => '25', '30' => '30', '35' => '35', '40' => '40', '45' => '45', '50' => '50', '55' => '55');
+		$ampm = array('am' => 'AM', 'pm' => 'PM');
 
 		$this->form
 			->html("<h2>{$event->event_name}</h2>")
 			->open('entries/add/' . $event_id)
 			->text('date', $this->lang->line('entries_form_date'), 'required', $date->format('Y-m-d'), array(
 				'type' => 'date',
-				'data-role' =>'datebox',
-				'data-options'=> '{&quot;mode&quot;: &quot;calbox&quot;}'
 				)) //Date
-			->text('time', $this->lang->line('entries_form_time'), 'required', $date->format('g:i a'), array(
-				'type' => 'date',
-				'data-role' =>'datebox',
-				'data-options'=> '{&quot;mode&quot;: &quot;timebox&quot;, &quot;timeFormatOverride&quot;: 12}'
-				)) //Date
+			->select(
+				'hour',
+				$hours,
+				$this->lang->line('entries_form_time'),
+				$date->format('g'),
+				'required',
+					array(
+					'class' => 'form_time',
+					)
+				) //Date
+			->select(
+				'minute',
+				$minutes,
+				'',
+				round($date->format('i') / 5) * 5,
+				'required',
+					array(
+					'class' => 'form_time',
+					)
+				) //Date
+			->select(
+				'ampm',
+				$ampm,
+				'',
+				$date->format('a'),
+				'required',
+					array(
+					'class' => 'form_time',
+					)
+				) //Date
 			->textarea('comments', $this->lang->line('entries_form_comments'))
 			->submit($this->lang->line('entries_form_add_submit'), 'add_new_entry')
 			->submit($this->lang->line('cancel'), 'cancel');
@@ -83,7 +109,7 @@ class Entries extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$this->Entry->create($event_id, "{$post['date']} {$post['time']}", $post['comments']);
+			$this->Entry->create($event_id, "{$post['date']} {$post['hour']}:{$post['minute']} {$post['ampm']}", $post['comments']);
 			$this->Entry->save();
 
 			//Ok return to main
@@ -91,8 +117,6 @@ class Entries extends CI_Controller
 
 		}
 
-		$this->template->add_js('assets/js/jquery.mobile.datebox-1.0.0.min.js', 'import');
-		$this->template->add_css('assets/css/jquery.mobile.datebox-1.0.0.min.css', 'import');
 		$data['title'] = $this->lang->line('entries_add_title');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
@@ -128,26 +152,46 @@ class Entries extends CI_Controller
 			$events[$event->event_id] = $event->event_name;
 		}
 
+		$hours = array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10', '11' => '11', '12' => '12');
+		$minutes = array('00' => '00', '05' => '05', '10' => '10', '15' => '15', '20' => '20', '25' => '25', '30' => '30', '35' => '35', '40' => '40', '45' => '45', '50' => '50', '55' => '55');
+		$ampm = array('am' => 'AM', 'pm' => 'PM');
 		$this->form
-			->html("<h2>{$events[$this->Entry->event_id]->event_name}</h2>")
+			->html("<h2>{$events[$this->Entry->event_id]}</h2>")
 			->open('entries/edit/' . $entry_id)
 			->text('date', $this->lang->line('entries_form_date'), 'required', $this->Entry->date->format('Y-m-d'), array(
 				'type' => 'date',
-				'data-role' =>'datebox',
-				'data-options'=> '{&quot;mode&quot;: &quot;calbox&quot;}'
 				)) //Date
-			->text(
-				'time',
+			->select(
+				'hour',
+				$hours,
 				$this->lang->line('entries_form_time'),
+				$this->Entry->date->format('g'),
 				'required',
-				$this->Entry->date->format('g:i a'),
 					array(
-					'type' => 'date',
-					'data-role' =>'datebox',
-					'data-options' => '{&quot;mode&quot;: &quot;timebox&quot;, &quot;timeFormatOverride&quot;: 12}'
+					'class' => 'form_time',
 					)
 				) //Date
-			->select('event_id', $events, $this->lang->line('entries_form_event'), 'required',$this->Entry->event_id)
+			->select(
+				'minute',
+				$minutes,
+				'',
+				round($this->Entry->date->format('i') / 5) * 5,
+				'required',
+					array(
+					'class' => 'form_time',
+					)
+				) //Date
+			->select(
+				'ampm',
+				$ampm,
+				'',
+				$this->Entry->date->format('a'),
+				'required',
+					array(
+					'class' => 'form_time',
+					)
+				) //Date
+			->select('event_id', $events, $this->lang->line('entries_form_event'), $this->Entry->event_id, 'required')
 			->textarea('comments', $this->lang->line('entries_form_comments'), '',$this->Entry->comments)
 			->submit($this->lang->line('entries_form_edit_submit'), 'add_new_entry')
 			->submit($this->lang->line('cancel'), 'cancel');
@@ -158,7 +202,7 @@ class Entries extends CI_Controller
 		{
 			$post = $this->form->get_post();
 
-			$this->Entry->set_timestamp("{$post['date']} {$post['time']}");
+			$this->Entry->set_timestamp("{$post['date']} {$post['hour']}:{$post['minute']} {$post['ampm']}");
 			$this->Entry->event_id = $post['event_id'][0];
 			$this->Entry->comments = $post['comments'];
 
@@ -170,8 +214,6 @@ class Entries extends CI_Controller
 		}
 
 		$data['title'] = $this->lang->line('entries_edit_title');
-		$this->template->add_js('assets/js/jquery.mobile.datebox-1.0.0.min.js', 'import');
-		$this->template->add_css('assets/css/jquery.mobile.datebox-1.0.0.min.css', 'import');
 		$this->template->write_view('content', 'forms', $data);
 		$this->template->render();
 	}
@@ -184,7 +226,7 @@ class Entries extends CI_Controller
 	 */
 	public function history()
 	{
-		$data['entries'] = $this->Entry->get_all_entries();
+		$data['entries'] = $this->Entry->get_all_entries(20);
 
 		$this->load->model('Event');
 		$data['events'] = $this->Event->get_all_events(TRUE);
