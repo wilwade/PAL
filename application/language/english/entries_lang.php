@@ -20,6 +20,12 @@ $lang['entries_edit_title'] =
 $lang['entries_history_title'] =
 	'Event Log History';
 
+$lang['entries_next'] =
+	'Next';
+
+$lang['entries_previous'] =
+	'Previous';
+
 
 
 //Form

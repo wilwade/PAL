@@ -72,7 +72,7 @@ class Entry extends CI_Model
 	 *
 	 * @return array
 	 */
-	public function get_all_entries($limit = FALSE)
+	public function get_all_entries($limit = FALSE, $offset = 0)
 	{
 		$this->db
 			->select()
@@ -80,7 +80,7 @@ class Entry extends CI_Model
 
 		if($limit !== FALSE)
 		{
-			$this->db->limit((int)$limit);
+			$this->db->limit((int)$limit, (int)$offset);
 		}
 
 		$query = $this->db->get('entry');

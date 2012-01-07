@@ -1,3 +1,15 @@
+<?php if ($next === TRUE): ?>
+<div id="next_button" class="event_button">
+	<?php print anchor("entries/history/{$page_next}", $this->lang->line('entries_next'), array('class' => 'gray')); ?>
+</div>
+	<?php endif; ?>
+
+<?php if ($previous === TRUE): ?>
+<div id="previous_button" class="event_button">
+	<?php print anchor("entries/history/{$page_previous}", $this->lang->line('entries_previous'), array('class' => 'gray')); ?>
+</div>
+	<?php endif; ?>
+
 <?php if ($entries !== FALSE): ?>
 	<?php foreach ($entries as $entry): ?>
 
@@ -16,6 +28,18 @@
 <?php else: ?>
 	<p><?php print $this->lang->line('entries_no_entries_found'); ?></p>
 <?php endif; ?>
+
+<?php if ($next === TRUE): ?>
+<div id="next_button" class="event_button">
+	<?php print anchor("entries/history/{$page_next}", $this->lang->line('entries_next'), array('class' => 'gray')); ?>
+</div>
+	<?php endif; ?>
+
+<?php if ($previous === TRUE): ?>
+<div id="previous_button" class="event_button">
+	<?php print anchor("entries/history/{$page_previous}", $this->lang->line('entries_previous'), array('class' => 'gray')); ?>
+</div>
+	<?php endif; ?>
 
 <div id="events" class="event_button">
 	<?php print anchor('events', $this->lang->line('events'), array('class' => 'gray')); ?>

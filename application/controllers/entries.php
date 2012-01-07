@@ -224,9 +224,16 @@ class Entries extends CI_Controller
 	 *
 	 * @return page
 	 */
-	public function history()
+	public function history($page = 0)
 	{
-		$data['entries'] = $this->Entry->get_all_entries(20);
+		$data['page_next'] = $page + 1;
+		$data['page_previous'] = $page - 1;
+
+		$page = $page * 20;
+		$data['entries'] = $this->Entry->get_all_entries(20, $page);
+
+		$data['next'] = count($data['entries']) === 20 ? TRUE : FALSE;
+		$data['previous'] = (int)$page === 0 ? FALSE : TRUE;
 
 		$this->load->model('Event');
 		$data['events'] = $this->Event->get_all_events(TRUE);
