@@ -83,7 +83,7 @@ class Entries extends CI_Controller
 				'minute',
 				$minutes,
 				'',
-				round($date->format('i') / 5) * 5,
+				floor($date->format('i') / 5) * 5,
 				'required',
 					array(
 					'class' => 'form_time',
@@ -175,7 +175,7 @@ class Entries extends CI_Controller
 				'minute',
 				$minutes,
 				'',
-				round($this->Entry->date->format('i') / 5) * 5,
+				floor($this->Entry->date->format('i') / 5) * 5,
 				'required',
 					array(
 					'class' => 'form_time',
@@ -209,7 +209,7 @@ class Entries extends CI_Controller
 			$this->Entry->save();
 
 			//Ok return to main
-			return redirect('events');
+			return redirect('entries/history');
 
 		}
 

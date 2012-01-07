@@ -132,9 +132,12 @@ class Setup_db extends CI_Model
 				'unsigned' => TRUE,
 				'constraint' => 14,
 			),
+			'insert_time' => array(
+				'type' => 'TIMESTAMP',
+				'default' => 'CURRENT_TIMESTAMP',
+			)
 		);
 		$this->dbforge->add_field($entry);
-		$this->dbforge->add_key('event_id', TRUE);
 		$this->dbforge->add_key('entry_id', TRUE);
 		if ( ! $this->dbforge->create_table('entry'))
 		{
